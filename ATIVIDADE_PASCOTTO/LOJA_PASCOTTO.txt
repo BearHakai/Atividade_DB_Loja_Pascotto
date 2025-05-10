@@ -1,0 +1,107 @@
+CREATE DATABASE loja_pascotto;
+USE loja_pascotto;
+
+CREATE TABLE cargos (
+	id_cargo INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50),
+    descricao VARCHAR(250)
+);
+
+CREATE TABLE funcionarios (
+	id_funcionario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR (100),
+    cpf VARCHAR (15) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    email VARCHAR (250) NOT NULL,
+    endereco VARCHAR (250),
+    telefone VARCHAR (50),
+    cargo INT NOT NULL,
+    CONSTRAINT fk_funcionario_cargo FOREIGN KEY (cargo) REFERENCES cargos(id_cargo)
+);
+
+CREATE TABLE clientes (
+	id_cliente INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100),
+    cpf VARCHAR (15) NOT NULL,
+    data_nascimento DATE NOT NULL,
+    email VARCHAR (250) NOT NULL,
+    endereco VARCHAR (250),
+    telefone VARCHAR (50)
+);
+
+CREATE TABLE fornecedores (
+	 id_fornecedor INT AUTO_INCREMENT PRIMARY KEY,
+    cnpj VARCHAR (50) NOT NULL,
+    rz_social VARCHAR (250),
+    endereco VARCHAR (250),
+    telefone VARCHAR (250)
+);
+
+CREATE TABLE produtos (
+	id_produto INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR (50) NOT NULL,
+    marca VARCHAR (50),
+    valor_uni DOUBLE NOT NULL,
+    qtd_produto INT,
+    fornecedor INT NOT NULL,
+    CONSTRAINT fk_produto_fornecedor FOREIGN KEY (fornecedor) REFERENCES fornecedores (id_fornecedor)
+);
+
+CREATE TABLE lista_compra (
+	id_lista INT AUTO_INCREMENT PRIMARY KEY,
+    produtos INT,
+    cliente INT,
+    valor_uni DOUBLE,
+    CONSTRAINT fk_lista_produto FOREIGN KEY (produtos) REFERENCES produtos (id_produto),
+    CONSTRAINT fk_lista_cliente FOREIGN KEY (cliente) REFERENCES clientes (id_cliente)
+);
+
+INSERT INTO cargos (nome, descricao) VALUES 
+("Supervior", "Supervisionar e coordenar sua equipe, controlando acessos e tendo acesso administrativo"),
+("Vendedor", "Organizar os produtos, cadastrar os produtos, ajudar os clientes e entrar em contato com os forncedores"),
+("Suporte TI", "Supervisionar o Software, mantendo ele funcionando, auxiliar as equipes com dúvidas referentes ao Software");
+
+INSERT INTO funcionarios (nome, cpf, data_nascimento, email, endereco, telefone, cargo) VALUES
+("William", "123.123.432-00", "1990-10-23", "willy@gmail.com", "R.Ayrton Senna 999", "(11) 9770-0069", 1),
+("Roubério", "321.321.123-99", "2003-11-09", "robe@gmail.com", "Av. Joao Barros 100",  "(11) 9233-3321", 2),
+("Caue", "000.999.890-12", "1998-02-20", "call@gmail.com", "R.Eng. Bariston 70", "(23) 9090-0950", 3),
+("Joao", "797.990.456-90", "1998-03-29" , "jojo@gmail.com", "Av. Carlos Albuquerque 90", "(11) 9890-7980", 2),
+("Vinicius", "666.333.999-33", "2003-09-28", "vini@gmail.com", "Rod. Raposo km 19, 200", "(11) 97090-0980", 3),
+("Kleberiano", "343.567.909-22", "1999-04-16", "kleber@gmail.com", "R.Ayrton Senna 888", "(11) 98099-0989", 2),
+("Katia", "456.098.789-77", "2004-09-13", "kaka@gmail.com", "R.Ayrton Senna 999", "(11) 98767-8940", 2);
+
+INSERT INTO clientes (nome, cpf, data_nascimento, email, endereco, telefone) VALUES 
+("Albert", "726.005.220-18", "1980-04-30", "bert@gmail.com", "R.Serra de Bragança, 88", "(11) 96045-4560"),
+("Janaina", "257.572.060-55", "2005-05-26", "nana@gmail.com", "R.Pereira Estefano, 78", "(11) 96530-9067"),
+("Artur", "296.532.290-60", "1999-08-31", "excalibur@gmail.com", "Av.Afonso Pena, 333", "(11) 95909-3958"),
+("Rafael", "024.678.630-26", "1996-06-28", "fael@gmail.com", "R.Tenente-Coronel Cardoso, 773", "(11) 98787-6543"),
+("Cleidinneya", "262.450.420-62", "2002-07-23", "nneya@gmail.com", "R.da Imprensa, 876", "(11) 97645-9234"),
+("Tamires", "682.009.640-27", "2000-03-12", "tamires@gmail.com", "R.Pereira Estéfano, 444", "(11) 98921-4312"),
+("Josefino", "419.137.600-49", "1998-07-16", "josefinin@gmail.com", "R.Carlos Augusto Cornelsen, 92", "(11) 96564-0432");
+
+INSERT INTO fornecedores (cnpj, rz_social, endereco, telefone) VALUES
+("56.172.586/0001-26", "Coca-Cola", "R.Tenente-Coronel Cardoso, 45", "(11) 95653-9087"),
+("55.429.686/0001-22", "Sansung", "Av.Sao Joao, 89", "(11) 91245-6572"),
+("37.868.882/0001-11", "GamesJam", "Av.Governador Jose Malcher,1010", "(11) 98754-9123"),
+("39.751.670/0001-85", "OldSpice", "Av.Rio Branco, 80", "(11) 95432-8153"),
+("30.130.238/0001-00", "Fervor Juice", "R.Barao de Vitoria, 446", "(11) 97382-8259"),
+("92.550.888/0001-54", "Beauty LTDA", "R.Arlindo Nogueira, 321", "(11) 974382-9034"),
+("04.527.243/0001-33", "FeshCore", "R.das Fiandeiras, 989", "(11) 97294-0719");
+
+INSERT INTO produtos (nome, marca, valor_uni, qtd_produto, fornecedor) VALUES
+("Coca-Cola 2L", "Coca-Cola", 10.99, 80, 1),
+("Fanta Laranja 2L", "Coca-Cola", 9.99, 70, 1),
+("Galaxy One", "Sansung", 1299.89, 100, 2),
+("Galaxy Orange 2L", "Fervor", 7.70, 60, 5),
+("Batom vermelho", "Beauty LTDA", 40.82, 55, 6),
+("Batom Rosa", "Beauty LTDA", 55.97, 33, 6),
+("God of Bar", "GamesJam", 33.20, 79, 3);
+
+INSERT INTO lista_compra (produtos, cliente, valor_uni) VALUES
+(1, 3, 10.99),
+(7, 3, 33.20),
+(5, 5, 55.60),
+(6, 5, 33.60),
+(3, 5, 1299.89),
+(4, 7, 7.70),
+(7, 6, 33.20);
